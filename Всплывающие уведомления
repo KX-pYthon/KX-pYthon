@@ -1,0 +1,33 @@
+from platform import system as psystem
+import time
+from os import system
+
+
+def linux_notify(text):
+    try:
+        import notify2
+        icon_path = "C:/*"
+        notify2.init(text)
+        mess = notify2.Notification(text, icon=icon_path)
+        mess.set_urgency(notify2.URGENCY_NORMAL)
+        mess.show()
+    except ModuleNotFoundError:
+        command = f'''notify-send {text}'''
+        system(command)
+
+
+def windows_notify(text):
+    from plyer import notification
+    from win10toast import ToastNotifier
+    ToastNotifier().show_toast("Демо сообщение", text, icon_path=r"C:\Windows\WinSxS\amd64_microsoft-windows-dxp-"
+                                                                 r"deviceexperience_31bf3856ad364e35_10.0.19041.746"
+                                                                 r"_none_251e769058968366\sync.ico",
+                               duration=3, threaded=True)
+    time.sleep(40)
+if name == "__main__":
+    message = input('[+] Введите текст сообщение: ')
+
+    if psystem() == "Linux":
+        linux_notify(message)
+    elif psystem() == "Windows":
+        windows_notify(message)
